@@ -42,12 +42,14 @@ class OmniBrain:
             "RULES: Keep it extremely short. No explanations."
         )
 
+        last_error = "Unknown Error"
         for attempt in range(len(self.api_keys)):
             try:
                 img = Image.open(image_path)
                 response = self.model.generate_content([system_prompt, img])
                 return response.text.strip()
             except Exception as e:
+                last_error = str(e)
                 print(f"[Brain] Key {self.current_key_index} Failed: {e}")
                 # Switch to Next Key
                 self.current_key_index = (self.current_key_index + 1) % len(self.api_keys)
@@ -55,7 +57,7 @@ class OmniBrain:
                 print(f"[Brain] Retrying with Key {self.current_key_index}...")
                 continue
 
-        return "All Keys Failed."
+        return f"Fail: {last_error[:50]}"
 
 # --- 2. The Stealth UI ---
 class HeartbeatState:

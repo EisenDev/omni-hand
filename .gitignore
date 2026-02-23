@@ -1,10 +1,12 @@
 venv/
 __pycache__/
 *.pyc
-dist/
 build/
 *.spec
 scan.png
 *.png
 .idea/
 .vscode/
+.env
+dist/.env
+*.env
