@@ -5,8 +5,18 @@ build/
 *.spec
 scan.png
 *.png
+ghost_scan.png
 .idea/
 .vscode/
+
+# Sensitive Data
 .env
-dist/.env
 *.env
+config.dat
+dist/config.dat
+*.dat
+
+# Keep specific examples
+!example.env
+!exampleConfig.dat
+!dist/exampleConfig.dat
