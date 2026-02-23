@@ -1,3 +1,6 @@
+import os
+from dotenv import load_dotenv
+
 # Load local config file (Stealth renamed .env)
 load_dotenv("config.dat")
 
