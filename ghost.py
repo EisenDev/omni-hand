@@ -69,30 +69,80 @@ HTML_TEMPLATE = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
+    
+    <!-- PWA / Stealth App Meta Tags (Hides URL Bar) -->
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Omni-Hand Mobile</title>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#000000">
+    
+    <title>System Monitor</title>
     <style>
-        body { background: #000; color: #eee; font-family: sans-serif; margin: 0; display: flex; flex-direction: column; height: 100vh; }
-        .header { padding: 40px 20px 10px; font-size: 11px; color: #333; text-align: center; letter-spacing: 2px; }
-        .content { flex: 1; padding: 20px; display: flex; flex-direction: column; justify-content: center; }
-        #answer { background: #080808; border: 1px solid #111; padding: 25px; border-radius: 15px; min-height: 180px; font-size: 18px; color: #666; word-wrap: break-word; }
-        #answer.success { color: #00ff88; border-color: #003311; }
-        .footer { padding: 30px; }
-        #btn { width: 100%; padding: 25px; border: 1px solid #222; background: #050505; color: #444; font-size: 14px; font-weight: bold; border-radius: 15px; }
-        #btn:active { background: #111; color: #888; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { 
+            background: #000; color: #1a1a1a; 
+            font-family: monospace; margin: 0; 
+            display: flex; flex-direction: column; 
+            height: 100vh; width: 100vw; overflow: hidden;
+        }
+        .header { 
+            padding: 40px 20px 10px; font-size: 10px; color: #0a0a0a; 
+            flex-shrink: 0;
+        }
+        .content { 
+            flex: 1; padding: 20px; overflow-y: auto; 
+            display: flex; flex-direction: column;
+        }
+        #answer { 
+            width: 100%; font-size: 14px; 
+            color: #000; 
+            word-wrap: break-word; line-height: 1.6;
+            transition: color 0.2s;
+            min-height: 100%;
+        }
+        #answer.visible { color: #444 !important; }
+        
+        .footer { 
+            padding: 20px; background: #000;
+            position: sticky; bottom: 0; width: 100%;
+            border-top: 1px solid #050505;
+            flex-shrink: 0;
+        }
+        #btn { 
+            width: 100%; padding: 18px; border: 1px solid #080808; 
+            background: #030303; color: #0a0a0a; font-size: 10px; border-radius: 4px;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        #btn:active { background: #080808; color: #111; }
     </style>
 </head>
-<body>
-    <div class="header">SYSTEM_INTERNAL_SYNC_01</div>
-    <div class="content"><div id="answer">AWAITING_INPUT...</div></div>
-    <div class="footer"><button id="btn" onclick="triggerScan()">RETREIVE_DATA</button></div>
+<body onclick="document.getElementById('answer').classList.toggle('visible')">
+    <div class="header">STATUS: SYSTEM_STABLE_0x228</div>
+    <div class="content">
+        <div id="answer">NULL_INIT</div>
+    </div>
+    <div class="footer">
+        <button id="btn" onclick="event.stopPropagation(); triggerScan()">RELOAD_STREAM</button>
+    </div>
     <script>
         function triggerScan() {
+            // Expanded compatibility for Fullscreen request
+            const el = document.documentElement;
+            if (el.requestFullscreen) { el.requestFullscreen(); }
+            else if (el.webkitRequestFullscreen) { el.webkitRequestFullscreen(); }
+            else if (el.msRequestFullscreen) { el.msRequestFullscreen(); }
+
             const d = document.getElementById('answer');
-            d.innerText = "CAPTURING..."; d.classList.remove('success');
-            fetch('/scan').then(res => res.json()).then(data => {
-                d.innerText = data.result; d.classList.add('success');
-            }).catch(err => { d.innerText = "SYNC_LOST"; });
+            d.classList.remove('visible'); 
+            d.innerText = "CAPTURING_STREAM...";
+            
+            fetch('/scan')
+                .then(res => res.json())
+                .then(data => {
+                    d.innerText = data.result;
+                    if (window.navigator.vibrate) window.navigator.vibrate(15);
+                })
+                .catch(err => { d.innerText = "LINK_TIMEOUT"; });
         }
     </script>
 </body>
