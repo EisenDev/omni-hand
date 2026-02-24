@@ -69,15 +69,13 @@ class HeartbeatState:
 class StealthBox(QLabel):
     def __init__(self, parent=None):
         super().__init__(parent)
-        # ULTRA STEALTH STYLING: Dim Teal on Dark background
-        # Unreadable from even 2 feet away.
+        # STEALTH STYLING: Gray text on transparent background
         self.setStyleSheet("""
             QLabel {
-                background-color: #050505; 
-                color: #004d4d; 
-                border: 1px solid #0a0a0a;
-                border-radius: 2px;
-                padding: 6px;
+                background-color: transparent; 
+                color: #777777; 
+                border: none;
+                padding: 4px;
                 font-family: "Consolas";
                 font-size: 10px;
             }
