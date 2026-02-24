@@ -69,21 +69,22 @@ class HeartbeatState:
 class StealthBox(QLabel):
     def __init__(self, parent=None):
         super().__init__(parent)
-        # STEALTH STYLING: Looks like the "No API Key" tooltip
+        # ULTRA STEALTH STYLING: Dim Teal on Dark background
+        # Unreadable from even 2 feet away.
         self.setStyleSheet("""
             QLabel {
-                background-color: #2d2d2d; 
-                color: #cccccc; 
-                border: 1px solid #454545;
-                border-radius: 4px;
-                padding: 8px;
-                font-family: "Segoe UI";
-                font-size: 11px;
+                background-color: #050505; 
+                color: #004d4d; 
+                border: 1px solid #0a0a0a;
+                border-radius: 2px;
+                padding: 6px;
+                font-family: "Consolas";
+                font-size: 10px;
             }
         """)
         self.setWordWrap(True)
         self.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
-        self.setFixedWidth(280) # Fixed small width
+        self.setFixedWidth(240) # Even narrower
         self.hide() # Hidden by default
 
 class Overlay(QWidget):
